@@ -1,0 +1,26 @@
+# Project information
+PROJECT_NAME           = "ShinyAllocator"
+PROJECT_NUMBER         = 1.0
+PROJECT_BRIEF          = "ShinyAllocator is  a library of a block memory allocator for real-time high-integrity embedded systems. "
+
+# Input and output directories
+INPUT                  = src include tests
+OUTPUT_DIRECTORY       = docs
+
+# Documentation format and style
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+#HTML_STYLESHEET        = doxygen.css
+#HTML_EXTRA_STYLESHEET  = mystyle.css
+#GENERATE_LATEX         = YES
+#LATEX_OUTPUT           = latex
+#LATEX_CMD_NAME         = pdflatex
+
+# Other options
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+#EXAMPLE_RECURSIVE      = YES
+#EXAMPLE_PATTERNS       = *
+#EXAMPLE_PATH           = examples
+RECURSIVE              = YES
