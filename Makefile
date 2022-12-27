@@ -1,7 +1,7 @@
 # Specify the compiler and flags
 # CC = arm-none-eabi-gcc
-CC = gcc
-CFLAGS = -std=c11 -O2 -Wall -Wextra -fPIC
+CC = g++
+CFLAGS = -std=c++11 -O2 -Wall -Wextra -fPIC
 
 # Specify the source and header files
 SOURCES = $(wildcard src/*.c)
@@ -22,7 +22,7 @@ $(LIBRARY): $(OBJECTS)
 
 # Rule to build the object files
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
 
 # Clean target
 clean:
@@ -33,5 +33,8 @@ release: CFLAGS += -O3
 release: $(LIBRARY)
 
 # Documentation target
-docs:
+docs: FORCE
 	doxygen Doxyfile
+
+# Force target
+.PHONY: FORCE

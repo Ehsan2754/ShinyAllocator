@@ -10,11 +10,11 @@ OUTPUT_DIRECTORY       = docs
 # Documentation format and style
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
-#HTML_STYLESHEET        = doxygen.css
-#HTML_EXTRA_STYLESHEET  = mystyle.css
-#GENERATE_LATEX         = YES
-#LATEX_OUTPUT           = latex
-#LATEX_CMD_NAME         = pdflatex
+# HTML_STYLESHEET        = doxygen.css
+# HTML_EXTRA_STYLESHEET  = mystyle.css
+GENERATE_LATEX         = NO
+# LATEX_OUTPUT           = latex
+# LATEX_CMD_NAME         = pdflatex
 
 # Other options
 EXTRACT_ALL            = YES
