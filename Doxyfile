@@ -9,7 +9,7 @@ OUTPUT_DIRECTORY       = docs
 
 # Documentation format and style
 GENERATE_HTML          = YES
-HTML_OUTPUT            = html
+HTML_OUTPUT            = .
 # HTML_STYLESHEET        = doxygen.css
 # HTML_EXTRA_STYLESHEET  = mystyle.css
 GENERATE_LATEX         = NO
