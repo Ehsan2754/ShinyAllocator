@@ -1,6 +1,8 @@
 # ShinyAllocator
 ShinyAllocator is  a library of a block memory allocator for real-time high-integrity embedded systems. 
 
+# Documentation
+https://ehsan2754.github.io/ShinyAllocator/
 
 # Installation [Development]
  0. Choose your Installation path and version of your toolchain in installation [script](./scripts/install_toolchain.sh).
