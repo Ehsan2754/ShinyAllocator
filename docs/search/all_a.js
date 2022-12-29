@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['peakallocated_18',['peakAllocated',['../structshinyAllocatorDiagnostics.html#a93ef740f661e6b0862afb4a998509d77',1,'shinyAllocatorDiagnostics']]],
-  ['peakrequestsize_19',['peakRequestSize',['../structshinyAllocatorDiagnostics.html#a1ff9bc413a7b0fc77b48eb81851ac7f8',1,'shinyAllocatorDiagnostics']]],
-  ['pow2_20',['pow2',['../shinyAllocator_8c.html#a409c2a6213b26abe3dc2dcf2e2e3e556',1,'shinyAllocator.c']]],
-  ['prev_21',['prev',['../structFragmentHeader.html#ad102d9d40c86a6df357e2c8441736ff1',1,'FragmentHeader']]],
-  ['prevfree_22',['prevFree',['../structFragment.html#a6f9960e122efd7a17b6f9bbc543eb523',1,'Fragment']]]
+  ['next_18',['next',['../structFragmentHeader.html#aa2dd36ba1fefddf707b482defe3c0c64',1,'FragmentHeader']]],
+  ['nextfree_19',['nextFree',['../structFragment.html#a072df9de6668a57ad3db2f62d28c61c8',1,'Fragment']]],
+  ['nonemptybinmask_20',['nonEmptyBinMask',['../structshinyAllocatorInstance.html#ac29dcf3377cf3c70f2b573bbfc68c0d9',1,'shinyAllocatorInstance']]],
+  ['num_5ffragments_5fmax_21',['NUM_FRAGMENTS_MAX',['../shinyAllocator_8c.html#a013e66d29a51718769744d998b60afbc',1,'shinyAllocator.c']]]
 ];

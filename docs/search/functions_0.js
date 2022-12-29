@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['log2floor_45',['log2Floor',['../shinyAllocator_8c.html#a77f5f2d201de671921a964627ca76cf0',1,'shinyAllocator.c']]]
+  ['appendfragment_55',['appendFragment',['../shinyAllocator_8c.html#a2047875967223f1bb1b2da1243246094',1,'shinyAllocator.c']]]
 ];

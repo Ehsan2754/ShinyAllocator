@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['shinyallocator_5fclz_47',['SHINYALLOCATOR_CLZ',['../shinyAllocator_8c.html#a7e1fbef848be8bbec36f67362cd322bf',1,'shinyAllocator.c']]],
-  ['shinyinit_48',['shinyInit',['../shinyAllocator_8c.html#a7afbc38dfd2b3494f60bb2f3b414a615',1,'shinyInit(void *const base, const size_t size):&#160;shinyAllocator.c'],['../shinyAllocator_8h.html#a7afbc38dfd2b3494f60bb2f3b414a615',1,'shinyInit(void *const base, const size_t size):&#160;shinyAllocator.c']]]
+  ['log2ceil_57',['log2Ceil',['../shinyAllocator_8c.html#a4567d2418321868c966991b34c703b8c',1,'shinyAllocator.c']]],
+  ['log2floor_58',['log2Floor',['../shinyAllocator_8c.html#a77f5f2d201de671921a964627ca76cf0',1,'log2Floor(const size_t x):&#160;shinyAllocator.c'],['../unitTests_8cc.html#ac0e1ea0b626f879ebeba45e8aac46be9',1,'log2Floor(const size_t x):&#160;unitTests.cc']]]
 ];

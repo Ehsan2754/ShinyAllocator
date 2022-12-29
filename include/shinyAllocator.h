@@ -26,6 +26,8 @@ extern "C"
 #define SHINYALLOCATOR_VERSION_MAJOR 1
 #define SHINYALLOCATOR_VERSION_MINOR 0
 
+
+
 /**
  * @brief Memory alignment based on platform pointer (8/16/32)
  *

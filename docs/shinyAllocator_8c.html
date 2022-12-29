@@ -113,10 +113,10 @@ Macros</h2></td></tr>
 <tr class="memitem:a71030bcac1bae3f915d44729835ca460"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a71030bcac1bae3f915d44729835ca460">SHINYALLOCATOR_USE_INTRINSICS</a>&#160;&#160;&#160;1</td></tr>
 <tr class="memdesc:a71030bcac1bae3f915d44729835ca460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activates compiler optimizations for annotations.  <a href="shinyAllocator_8c.html#a71030bcac1bae3f915d44729835ca460">More...</a><br /></td></tr>
 <tr class="separator:a71030bcac1bae3f915d44729835ca460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4fb16f4d08986ee08bb665ce1e4ecae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a>&#160;&#160;&#160;static inline</td></tr>
-<tr class="separator:ae4fb16f4d08986ee08bb665ce1e4ecae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6f8b712d7dc90944e0717aa6ad74a39"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#ad6f8b712d7dc90944e0717aa6ad74a39">SHINYALLOCATOR_LIKELY</a>(x)&#160;&#160;&#160;x</td></tr>
 <tr class="separator:ad6f8b712d7dc90944e0717aa6ad74a39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4fb16f4d08986ee08bb665ce1e4ecae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a>&#160;&#160;&#160;static inline</td></tr>
+<tr class="separator:ae4fb16f4d08986ee08bb665ce1e4ecae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a921ee789ce21e59cf66aad72a9da8cd5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a921ee789ce21e59cf66aad72a9da8cd5">static_assert</a>(x, ...)&#160;&#160;&#160;typedef char <a class="el" href="shinyAllocator_8c.html#afeae518118b2e81874a7fa7f921ddb54">_static_assert_gl</a>(_static_assertion_, __LINE__)[(x) ? 1 : -1]</td></tr>
 <tr class="separator:a921ee789ce21e59cf66aad72a9da8cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeae518118b2e81874a7fa7f921ddb54"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#afeae518118b2e81874a7fa7f921ddb54">_static_assert_gl</a>(a,  b)&#160;&#160;&#160;<a class="el" href="shinyAllocator_8c.html#ab98302cb61777a2aea7eb6ef477124e5">_static_assert_gl_impl</a>(a, b)</td></tr>
@@ -124,10 +124,9 @@ Macros</h2></td></tr>
 <tr class="memitem:ab98302cb61777a2aea7eb6ef477124e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#ab98302cb61777a2aea7eb6ef477124e5">_static_assert_gl_impl</a>(a,  b)&#160;&#160;&#160;a##b</td></tr>
 <tr class="separator:ab98302cb61777a2aea7eb6ef477124e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5542f4d9d9d892532cc5b363907a9648"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a5542f4d9d9d892532cc5b363907a9648">FRAGMENT_SIZE_MIN</a>&#160;&#160;&#160;(<a class="el" href="shinyAllocator_8h.html#a8c0773bc4d5b9647db7e94a3bd8b11c6">SHINYALLOCATOR_ALIGNMENT</a> * 2U)</td></tr>
-<tr class="memdesc:a5542f4d9d9d892532cc5b363907a9648"><td class="mdescLeft">&#160;</td><td class="mdescRight">The occupying space by the allocator is maximum SHINYALLOCATOR_ALIGNMENT bytes big.  <a href="shinyAllocator_8c.html#a5542f4d9d9d892532cc5b363907a9648">More...</a><br /></td></tr>
+<tr class="memdesc:a5542f4d9d9d892532cc5b363907a9648"><td class="mdescLeft">&#160;</td><td class="mdescRight">The occupying space by the allocator is maximum SHINYALLOCATOR_ALIGNMENT bytes big and better to be bound the over head with the maximum possible fragment size regarding the overhead of the allocation.  <a href="shinyAllocator_8c.html#a5542f4d9d9d892532cc5b363907a9648">More...</a><br /></td></tr>
 <tr class="separator:a5542f4d9d9d892532cc5b363907a9648"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4d35f668b2229da68675c0e54a74b94"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#af4d35f668b2229da68675c0e54a74b94">FRAGMENT_SIZE_MAX</a>&#160;&#160;&#160;((SIZE_MAX &gt;&gt; 1U) + 1U)</td></tr>
-<tr class="memdesc:af4d35f668b2229da68675c0e54a74b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">if the allocation amount plus per-fragment overhead exceeds 2^(b-1), where b is the pointer bit width, then ceil(log2(amount)) yields b; then 2^b causes an integer overflow. To avoid this, we put a hard limit on fragment size (which is amount + per-fragment overhead): 2^(b-1)  <a href="shinyAllocator_8c.html#af4d35f668b2229da68675c0e54a74b94">More...</a><br /></td></tr>
 <tr class="separator:af4d35f668b2229da68675c0e54a74b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a013e66d29a51718769744d998b60afbc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a013e66d29a51718769744d998b60afbc">NUM_FRAGMENTS_MAX</a>&#160;&#160;&#160;(sizeof(size_t) * CHAR_BIT)</td></tr>
 <tr class="memdesc:a013e66d29a51718769744d998b60afbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum number of fragments that can be allocated to the pool.  <a href="shinyAllocator_8c.html#a013e66d29a51718769744d998b60afbc">More...</a><br /></td></tr>
@@ -138,8 +137,8 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a3ecfc0690fd3657ade42a1320b899b46"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="structFragment.html">Fragment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a3ecfc0690fd3657ade42a1320b899b46">Fragment</a></td></tr>
-<tr class="separator:a3ecfc0690fd3657ade42a1320b899b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f4309d2e67020d9dd360dda9ddc397d"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structFragment.html">Fragment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a0f4309d2e67020d9dd360dda9ddc397d">Fragment</a></td></tr>
+<tr class="separator:a0f4309d2e67020d9dd360dda9ddc397d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a394a365ae348d2316a3dac69ac809ab3"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structFragmentHeader.html">FragmentHeader</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a394a365ae348d2316a3dac69ac809ab3">FragmentHeader</a></td></tr>
 <tr class="memdesc:a394a365ae348d2316a3dac69ac809ab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">structuer to store fragment information  <a href="shinyAllocator_8c.html#a394a365ae348d2316a3dac69ac809ab3">More...</a><br /></td></tr>
 <tr class="separator:a394a365ae348d2316a3dac69ac809ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,11 +148,23 @@ Functions</h2></td></tr>
 <tr class="memitem:a7e1fbef848be8bbec36f67362cd322bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> uint_fast8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a7e1fbef848be8bbec36f67362cd322bf">SHINYALLOCATOR_CLZ</a> (const size_t x)</td></tr>
 <tr class="separator:a7e1fbef848be8bbec36f67362cd322bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77f5f2d201de671921a964627ca76cf0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> uint_fast8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a77f5f2d201de671921a964627ca76cf0">log2Floor</a> (const size_t x)</td></tr>
-<tr class="memdesc:a77f5f2d201de671921a964627ca76cf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">efficient binary logarithm of x implementation  <a href="shinyAllocator_8c.html#a77f5f2d201de671921a964627ca76cf0">More...</a><br /></td></tr>
+<tr class="memdesc:a77f5f2d201de671921a964627ca76cf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">efficient binary logarithm floor of x implementation  <a href="shinyAllocator_8c.html#a77f5f2d201de671921a964627ca76cf0">More...</a><br /></td></tr>
 <tr class="separator:a77f5f2d201de671921a964627ca76cf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4567d2418321868c966991b34c703b8c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> uint_fast8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a4567d2418321868c966991b34c703b8c">log2Ceil</a> (const size_t x)</td></tr>
+<tr class="memdesc:a4567d2418321868c966991b34c703b8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">efficient binary logarithm ceiling of x implementation  <a href="shinyAllocator_8c.html#a4567d2418321868c966991b34c703b8c">More...</a><br /></td></tr>
+<tr class="separator:a4567d2418321868c966991b34c703b8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a409c2a6213b26abe3dc2dcf2e2e3e556"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a409c2a6213b26abe3dc2dcf2e2e3e556">pow2</a> (const uint_fast8_t power)</td></tr>
 <tr class="memdesc:a409c2a6213b26abe3dc2dcf2e2e3e556"><td class="mdescLeft">&#160;</td><td class="mdescRight">efficient x-th power of two implementation  <a href="shinyAllocator_8c.html#a409c2a6213b26abe3dc2dcf2e2e3e556">More...</a><br /></td></tr>
 <tr class="separator:a409c2a6213b26abe3dc2dcf2e2e3e556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef600b83012cfb4d633e7acce9dc9252"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#aef600b83012cfb4d633e7acce9dc9252">roundUpToPowerOfTwo</a> (const size_t x)</td></tr>
+<tr class="separator:aef600b83012cfb4d633e7acce9dc9252"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74931ae3dc163d78743dc91b3e74040f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a74931ae3dc163d78743dc91b3e74040f">fragmentLink</a> (<a class="el" href="structFragment.html">Fragment</a> *left, <a class="el" href="structFragment.html">Fragment</a> *right)</td></tr>
+<tr class="memdesc:a74931ae3dc163d78743dc91b3e74040f"><td class="mdescLeft">&#160;</td><td class="mdescRight">links the given fragments previous and next fragments in a LeftToRight manner.  <a href="shinyAllocator_8c.html#a74931ae3dc163d78743dc91b3e74040f">More...</a><br /></td></tr>
+<tr class="separator:a74931ae3dc163d78743dc91b3e74040f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2047875967223f1bb1b2da1243246094"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a2047875967223f1bb1b2da1243246094">appendFragment</a> (<a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *const handle, <a class="el" href="structFragment.html">Fragment</a> *const fragment)</td></tr>
+<tr class="separator:a2047875967223f1bb1b2da1243246094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed93bcbfd7d287ea954338dea51fbbff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#aed93bcbfd7d287ea954338dea51fbbff">removeFragment</a> (<a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *const handle, const <a class="el" href="structFragment.html">Fragment</a> *const fragment)</td></tr>
+<tr class="separator:aed93bcbfd7d287ea954338dea51fbbff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7afbc38dfd2b3494f60bb2f3b414a615"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8c.html#a7afbc38dfd2b3494f60bb2f3b414a615">shinyInit</a> (void *const base, const size_t size)</td></tr>
 <tr class="memdesc:a7afbc38dfd2b3494f60bb2f3b414a615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the shinyAllocator for the given base pointer and size.  <a href="shinyAllocator_8c.html#a7afbc38dfd2b3494f60bb2f3b414a615">More...</a><br /></td></tr>
 <tr class="separator:a7afbc38dfd2b3494f60bb2f3b414a615"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,8 +238,6 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>if the allocation amount plus per-fragment overhead exceeds 2^(b-1), where b is the pointer bit width, then ceil(log2(amount)) yields b; then 2^b causes an integer overflow. To avoid this, we put a hard limit on fragment size (which is amount + per-fragment overhead): 2^(b-1) </p>
-
 </div>
 </div>
 <a id="a5542f4d9d9d892532cc5b363907a9648"></a>
@@ -243,7 +252,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>The occupying space by the allocator is maximum SHINYALLOCATOR_ALIGNMENT bytes big. </p>
+<p>The occupying space by the allocator is maximum SHINYALLOCATOR_ALIGNMENT bytes big and better to be bound the over head with the maximum possible fragment size regarding the overhead of the allocation. </p>
 
 </div>
 </div>
@@ -294,7 +303,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Build configurations </p>
 
 </div>
 </div>
@@ -375,14 +383,14 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="a3ecfc0690fd3657ade42a1320b899b46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ecfc0690fd3657ade42a1320b899b46">&#9670;&nbsp;</a></span>Fragment</h2>
+<a id="a0f4309d2e67020d9dd360dda9ddc397d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f4309d2e67020d9dd360dda9ddc397d">&#9670;&nbsp;</a></span>Fragment</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="structFragment.html">Fragment</a> <a class="el" href="structFragment.html">Fragment</a></td>
+          <td class="memname">typedef struct <a class="el" href="structFragment.html">Fragment</a> <a class="el" href="structFragment.html">Fragment</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -415,6 +423,99 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a2047875967223f1bb1b2da1243246094"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2047875967223f1bb1b2da1243246094">&#9670;&nbsp;</a></span>appendFragment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> void appendFragment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *const&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structFragment.html">Fragment</a> *const&#160;</td>
+          <td class="paramname"><em>fragment</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a74931ae3dc163d78743dc91b3e74040f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74931ae3dc163d78743dc91b3e74040f">&#9670;&nbsp;</a></span>fragmentLink()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> void fragmentLink </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structFragment.html">Fragment</a> *&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structFragment.html">Fragment</a> *&#160;</td>
+          <td class="paramname"><em>right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>links the given fragments previous and next fragments in a LeftToRight manner. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">left</td><td></td></tr>
+    <tr><td class="paramname">right</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4567d2418321868c966991b34c703b8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4567d2418321868c966991b34c703b8c">&#9670;&nbsp;</a></span>log2Ceil()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> uint_fast8_t log2Ceil </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>efficient binary logarithm ceiling of x implementation </p>
+<p>!</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>floor of x log 2 </dd></dl>
+
+</div>
+</div>
 <a id="a77f5f2d201de671921a964627ca76cf0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77f5f2d201de671921a964627ca76cf0">&#9670;&nbsp;</a></span>log2Floor()</h2>
 
@@ -431,7 +532,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>efficient binary logarithm of x implementation </p>
+<p>efficient binary logarithm floor of x implementation </p>
 <p>!</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -468,6 +569,59 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>x-th power of 2 </dd></dl>
+
+</div>
+</div>
+<a id="aed93bcbfd7d287ea954338dea51fbbff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed93bcbfd7d287ea954338dea51fbbff">&#9670;&nbsp;</a></span>removeFragment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> void removeFragment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *const&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structFragment.html">Fragment</a> *const&#160;</td>
+          <td class="paramname"><em>fragment</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aef600b83012cfb4d633e7acce9dc9252"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef600b83012cfb4d633e7acce9dc9252">&#9670;&nbsp;</a></span>roundUpToPowerOfTwo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="shinyAllocator_8c.html#ae4fb16f4d08986ee08bb665ce1e4ecae">SHINYALLOCATOR_PRIVATE</a> size_t roundUpToPowerOfTwo </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>closest power of two </dd></dl>
 
 </div>
 </div>
