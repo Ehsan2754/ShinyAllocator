@@ -5,7 +5,7 @@ CFLAGS = -std=c11 -O2 -Wall -Wextra
 
 # Test compiler and flags
 CXX = arm-none-eabi-g++
-# CXX = g++
+CXX = g++
 CXXFLAGS = -std=c++11 -O2 -Wall -Wextra
 LIBSXX= -lgtest -lpthread 
 # GTEST_FILTER="logging*"
