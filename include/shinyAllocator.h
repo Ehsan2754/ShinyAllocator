@@ -62,13 +62,22 @@ extern "C"
     shinyAllocatorDiagnostics shinyGetDiagnostics(shinyAllocatorInstance *handle);
     /**
      * @brief Initializes the shinyAllocator for the given base pointer and size.
-     * @param base base pointer for the pool, it should be aligned to SHINYALLOCATOR_ALIGNMENT
-     * @param size size of the pool, this parameter should not exceed SIZE_MAX/2
+     * @param base base pointer for the pool, it should be aligned to SHINYALLOCATOR_ALIGNMENT.
+     * @param size size of the pool, this parameter should not exceed SIZE_MAX/2.
      * @details allocator occupy 40+ bytes (up to 600 bytes depending on architecture) of the pool for holding its configuration.
-     * @returns NULL if the pool is not sufficient for the given size otherwise returns a pointer to the newly initialized allocator
-     * @note An initialized any resources, hence you can discard it without any de-initialization if it is not needed
+     * @returns NULL if the pool is not sufficient for the given size otherwise returns a pointer to the newly initialized allocator.
+     * @note An initialized any resources, hence you can discard it without any de-initialization if it is not needed.
      */
     shinyAllocatorInstance *shinyInit(void *const base, const size_t size);
+
+    /**
+     * @brief Allocated the requested memory to the given the pool handle, returns NULL if it fails.
+     * @param handle allocater handle to the pool.
+     * @param size the requested allocation size.
+     * @note may cause integer-overflow for bigger sizes. It's recommended keep overall allocated bytes less than SIZE_MAX/2-1.
+     */
+    void* shinyAllocate(shinyAllocatorInstance* const handle, const size_t amount);
+
 
 #ifdef __cplusplus
 }

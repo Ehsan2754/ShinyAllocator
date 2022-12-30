@@ -95,8 +95,9 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="shinyAllocator_8h__dep__incl.png" border="0" usemap="#ainclude_2shinyAllocator_8hdep" alt=""/></div>
 <map name="ainclude_2shinyAllocator_8hdep" id="ainclude_2shinyAllocator_8hdep">
-<area shape="rect" title=" " alt="" coords="5,5,183,32"/>
-<area shape="rect" href="shinyAllocator_8c.html" title=" " alt="" coords="20,80,168,107"/>
+<area shape="rect" title=" " alt="" coords="73,5,251,32"/>
+<area shape="rect" href="shinyAllocator_8c.html" title=" " alt="" coords="5,80,153,107"/>
+<area shape="rect" href="unitTests_8cc.html" title=" " alt="" coords="177,80,312,107"/>
 </map>
 </div>
 </div>
@@ -127,9 +128,14 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a5c5f3e6e705b4a998f7324b066f59356"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structshinyAllocatorDiagnostics.html">shinyAllocatorDiagnostics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8h.html#a5c5f3e6e705b4a998f7324b066f59356">shinyGetDiagnostics</a> (<a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *handle)</td></tr>
+<tr class="separator:a5c5f3e6e705b4a998f7324b066f59356"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7afbc38dfd2b3494f60bb2f3b414a615"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8h.html#a7afbc38dfd2b3494f60bb2f3b414a615">shinyInit</a> (void *const base, const size_t size)</td></tr>
 <tr class="memdesc:a7afbc38dfd2b3494f60bb2f3b414a615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the shinyAllocator for the given base pointer and size.  <a href="shinyAllocator_8h.html#a7afbc38dfd2b3494f60bb2f3b414a615">More...</a><br /></td></tr>
 <tr class="separator:a7afbc38dfd2b3494f60bb2f3b414a615"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ba18674a91e0bff60907b41acb9fd87"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shinyAllocator_8h.html#a4ba18674a91e0bff60907b41acb9fd87">shinyAllocate</a> (<a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *const handle, const size_t amount)</td></tr>
+<tr class="memdesc:a4ba18674a91e0bff60907b41acb9fd87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocated the requested memory to the given the pool handle, returns NULL if it fails.  <a href="shinyAllocator_8h.html#a4ba18674a91e0bff60907b41acb9fd87">More...</a><br /></td></tr>
+<tr class="separator:a4ba18674a91e0bff60907b41acb9fd87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a8c0773bc4d5b9647db7e94a3bd8b11c6"></a>
@@ -196,6 +202,62 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a4ba18674a91e0bff60907b41acb9fd87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ba18674a91e0bff60907b41acb9fd87">&#9670;&nbsp;</a></span>shinyAllocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* shinyAllocate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *const&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>amount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allocated the requested memory to the given the pool handle, returns NULL if it fails. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handle</td><td>allocater handle to the pool. </td></tr>
+    <tr><td class="paramname">size</td><td>the requested allocation size. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>may cause integer-overflow for bigger sizes. It's recommended keep overall allocated bytes less than SIZE_MAX/2-1. </dd></dl>
+
+</div>
+</div>
+<a id="a5c5f3e6e705b4a998f7324b066f59356"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c5f3e6e705b4a998f7324b066f59356">&#9670;&nbsp;</a></span>shinyGetDiagnostics()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structshinyAllocatorDiagnostics.html">shinyAllocatorDiagnostics</a> shinyGetDiagnostics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structshinyAllocatorInstance.html">shinyAllocatorInstance</a> *&#160;</td>
+          <td class="paramname"><em>handle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7afbc38dfd2b3494f60bb2f3b414a615"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7afbc38dfd2b3494f60bb2f3b414a615">&#9670;&nbsp;</a></span>shinyInit()</h2>
 
@@ -225,13 +287,13 @@ Functions</h2></td></tr>
 <p>Initializes the shinyAllocator for the given base pointer and size. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">base</td><td>base pointer for the pool, it should be aligned to SHINYALLOCATOR_ALIGNMENT </td></tr>
-    <tr><td class="paramname">size</td><td>size of the pool, this parameter should not exceed SIZE_MAX/2</td></tr>
+    <tr><td class="paramname">base</td><td>base pointer for the pool, it should be aligned to SHINYALLOCATOR_ALIGNMENT. </td></tr>
+    <tr><td class="paramname">size</td><td>size of the pool, this parameter should not exceed SIZE_MAX/2.</td></tr>
   </table>
   </dd>
 </dl>
-<p>allocator occupy 40+ bytes (up to 600 bytes depending on architecture) of the pool for holding its configuration. </p><dl class="section return"><dt>Returns</dt><dd>NULL if the pool is not sufficient for the given size otherwise returns a pointer to the newly initialized allocator </dd></dl>
-<dl class="section note"><dt>Note</dt><dd>An initialized any resources, hence you can discard it without any de-initialization if it is not needed </dd></dl>
+<p>allocator occupy 40+ bytes (up to 600 bytes depending on architecture) of the pool for holding its configuration. </p><dl class="section return"><dt>Returns</dt><dd>NULL if the pool is not sufficient for the given size otherwise returns a pointer to the newly initialized allocator. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>An initialized any resources, hence you can discard it without any de-initialization if it is not needed. </dd></dl>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "shinyAllocator.h"
-// using namespace std;
+using namespace std;
 namespace
 {
 
@@ -26,14 +26,20 @@ namespace
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
-        pool = shinyInit(arena, 99U);
+        pool = shinyInit(arena, 1e2);
         EXPECT_EQ(shinyGetDiagnostics(pool).capacity, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
-        // pool = shinyInit(arena, 1000U);
-        // cout << endl << shinyGetDiagnostics(pool).capacity << endl;
+        pool = shinyInit(arena, 1e3);
+        EXPECT_NE(pool, (shinyAllocatorInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnostics(pool).capacity, 384U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
+ 
     }
 
 }

@@ -136,7 +136,7 @@ static_assert(sizeof(Fragment) <= FRAGMENT_SIZE_MIN, "Memory layout error");
 struct shinyAllocatorInstance
 {
     Fragment *fragments[NUM_FRAGMENTS_MAX];
-    size_t nonEmptyBinMask;
+    size_t nonEmptyFragmentMask;
     shinyAllocatorDiagnostics diagnostics;
 };
 
@@ -229,7 +229,7 @@ SHINYALLOCATOR_PRIVATE void appendFragment(shinyAllocatorInstance *const handle,
         handle->fragments[index]->prevFree = fragment;
     }
     handle->fragments[index] = fragment;
-    handle->nonEmptyBinMask |= pow2(index);
+    handle->nonEmptyFragmentMask |= pow2(index);
 }
 
 /***
@@ -262,7 +262,7 @@ SHINYALLOCATOR_PRIVATE void removeFragment(shinyAllocatorInstance *const handle,
         handle->fragments[index] = fragment->nextFree;
         if (SHINYALLOCATOR_LIKELY(handle->fragments[index] == NULL))
         {
-            handle->nonEmptyBinMask &= ~pow2(index);
+            handle->nonEmptyFragmentMask &= ~pow2(index);
         }
     }
 }
@@ -273,14 +273,16 @@ SHINYALLOCATOR_PRIVATE void removeFragment(shinyAllocatorInstance *const handle,
 
 shinyAllocatorDiagnostics shinyGetDiagnostics(shinyAllocatorInstance *handle)
 {
-    shinyAllocatorDiagnostics diagnostics{
+    shinyAllocatorDiagnostics diagnostics={
         .capacity = 0U,
         .allocated = 0U,
         .peakAllocated = 0U,
         .peakRequestSize = 0U,
         .outOfMemeoryCount = 0U};
     if (handle)
+    {
         diagnostics = handle->diagnostics;
+    }
     return diagnostics;
 }
 
@@ -292,7 +294,7 @@ shinyAllocatorInstance *shinyInit(void *const base, const size_t size)
     {
         SHINYALLOCATOR_ASSERT(((size_t)base) % sizeof(shinyAllocatorInstance *) == 0U);
         out = (shinyAllocatorInstance *)base;
-        out->nonEmptyBinMask = 0U;
+        out->nonEmptyFragmentMask = 0U;
         for (size_t i = 0; i < NUM_FRAGMENTS_MAX; i++)
         {
             out->fragments[i] = NULL;
@@ -320,13 +322,88 @@ shinyAllocatorInstance *shinyInit(void *const base, const size_t size)
         frag->nextFree = NULL;
         frag->prevFree = NULL;
         appendFragment(out, frag);
-        SHINYALLOCATOR_ASSERT(out->nonEmptyBinMask != 0U);
+        SHINYALLOCATOR_ASSERT(out->nonEmptyFragmentMask != 0U);
 
         out->diagnostics.capacity = capacity;
         out->diagnostics.allocated = 0U;
         out->diagnostics.peakAllocated = 0U;
         out->diagnostics.peakRequestSize = 0U;
         out->diagnostics.outOfMemeoryCount = 0U;
+    }
+
+    return out;
+}
+void *shinyAllocate(shinyAllocatorInstance *const handle, const size_t amount)
+{
+    SHINYALLOCATOR_ASSERT(handle != NULL);
+    SHINYALLOCATOR_ASSERT(handle->diagnostics.capacity <= FRAGMENT_SIZE_MAX);
+    void *out = NULL;
+    if (SHINYALLOCATOR_LIKELY((amount > 0U) && (amount <= (handle->diagnostics.capacity - SHINYALLOCATOR_ALIGNMENT))))
+    {
+        const size_t fragmentSize = roundUpToPowerOfTwo(amount + SHINYALLOCATOR_ALIGNMENT);
+        SHINYALLOCATOR_ASSERT(fragmentSize <= FRAGMENT_SIZE_MAX);
+        SHINYALLOCATOR_ASSERT(fragmentSize >= FRAGMENT_SIZE_MIN);
+        SHINYALLOCATOR_ASSERT(fragmentSize >= amount + SHINYALLOCATOR_ALIGNMENT);
+        SHINYALLOCATOR_ASSERT((fragmentSize & (fragmentSize - 1U)) == 0U);
+
+        const uint_fast8_t optimalFragmentIndex = log2Ceil(fragmentSize / FRAGMENT_SIZE_MIN);
+        SHINYALLOCATOR_ASSERT(optimalFragmentIndex < NUM_FRAGMENTS_MAX);
+        const size_t candidateFragmentMask = ~(pow2(optimalFragmentIndex) - 1U);
+
+        const size_t suitableFragments = handle->nonEmptyFragmentMask & candidateFragmentMask;
+        const size_t smallestFragmentMask = suitableFragments & ~(suitableFragments - 1U);
+
+        if (SHINYALLOCATOR_LIKELY(smallestFragmentMask != 0))
+        {
+            SHINYALLOCATOR_ASSERT((smallestFragmentMask & (smallestFragmentMask - 1U)) == 0U);
+            const uint_fast8_t fragmentIndex = log2Floor(smallestFragmentMask);
+            SHINYALLOCATOR_ASSERT(fragmentIndex >= optimalFragmentIndex);
+            SHINYALLOCATOR_ASSERT(fragmentIndex < NUM_FRAGMENTS_MAX);
+
+            Fragment *const frag = handle->fragments[fragmentIndex];
+            SHINYALLOCATOR_ASSERT(frag != NULL);
+            SHINYALLOCATOR_ASSERT(frag->header.size >= fragmentSize);
+            SHINYALLOCATOR_ASSERT((frag->header.size % FRAGMENT_SIZE_MIN) == 0U);
+            SHINYALLOCATOR_ASSERT(!frag->header.used);
+            removeFragment(handle, frag);
+
+            const size_t leftover = frag->header.size - fragmentSize;
+            frag->header.size = fragmentSize;
+            SHINYALLOCATOR_ASSERT(leftover < handle->diagnostics.capacity);
+            SHINYALLOCATOR_ASSERT(leftover % FRAGMENT_SIZE_MIN == 0U);
+            if (SHINYALLOCATOR_LIKELY(leftover >= FRAGMENT_SIZE_MIN))
+            {
+                Fragment *const newFrag = (Fragment *)(void *)(((char *)frag) + fragmentSize);
+                SHINYALLOCATOR_ASSERT(((size_t)newFrag) % SHINYALLOCATOR_ALIGNMENT == 0U);
+                newFrag->header.size = leftover;
+                newFrag->header.used = false;
+                fragmentLink(newFrag, frag->header.next);
+                fragmentLink(frag, newFrag);
+                appendFragment(handle, newFrag);
+            }
+
+            SHINYALLOCATOR_ASSERT((handle->diagnostics.allocated % FRAGMENT_SIZE_MIN) == 0U);
+            handle->diagnostics.allocated += fragmentSize;
+            SHINYALLOCATOR_ASSERT(handle->diagnostics.allocated <= handle->diagnostics.capacity);
+            if (SHINYALLOCATOR_LIKELY(handle->diagnostics.peakAllocated < handle->diagnostics.allocated))
+            {
+                handle->diagnostics.peakAllocated = handle->diagnostics.allocated;
+            }
+
+            SHINYALLOCATOR_ASSERT(frag->header.size >= amount + SHINYALLOCATOR_ALIGNMENT);
+            frag->header.used = true;
+
+            out = ((char *)frag) + SHINYALLOCATOR_ALIGNMENT;
+        }
+    }
+
+    if (SHINYALLOCATOR_LIKELY(handle->diagnostics.peakRequestSize < amount))
+    {
+        handle->diagnostics.peakRequestSize = amount;
+    }
+    if (SHINYALLOCATOR_LIKELY((out == NULL) && (amount > 0U)))
+    {
+        handle->diagnostics.outOfMemeoryCount++;
     }
 
     return out;
