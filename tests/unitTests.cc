@@ -107,5 +107,15 @@ namespace
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
+        auto ptr = shinyAllocate(pool, KiB4-SHINYALLOCATOR_ALIGNMENT);
+        EXPECT_NE(ptr, (shinyAllocatorInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount,0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, KiB4);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, KiB4-SHINYALLOCATOR_ALIGNMENT);
+        
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, KiB4);
+        shinyFree(pool, ptr);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated,0);
+
     }
 }

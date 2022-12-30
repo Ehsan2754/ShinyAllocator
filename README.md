@@ -12,13 +12,14 @@ https://ehsan2754.github.io/ShinyAllocator/
        sudo scripts/install_toolchain.sh
 
        ```
-    > script will print two lines to add toolchain directory to your PATH
- 2. Install build, documentation, debug and profiling tools *make,doxygen,graphviz,valgrind,kcachegrind*
+ 2. script will print two lines to add toolchain directory to your PATH with default settings you can run
+     ```export PATH=$PATH:/usr/share/gcc-arm-none-eabi-10.3-2021.10/bin/ && source ~/.bashrc```
+ 3. Install build, documentation, debug and profiling tools *make,doxygen,graphviz,valgrind,kcachegrind*
        ```
        sudo apt-get update && sudo apt-get upgrade
        sudo apt-get install make cmake doxygen graphviz valgrind kcachegrind
        ```
-3. Installing test framework[gtest](https://github.com/google/googletest.git)
+1. Installing test framework [ [gtest](https://github.com/google/googletest.git) ]
    * On Ubuntu/RPI:
       ```
       sudo apt-get install libgtest-dev
