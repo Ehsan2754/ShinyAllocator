@@ -26,8 +26,6 @@ extern "C"
 #define SHINYALLOCATOR_VERSION_MAJOR 1
 #define SHINYALLOCATOR_VERSION_MINOR 0
 
-
-
 /**
  * @brief Memory alignment based on platform pointer (8/16/32)
  *
@@ -57,6 +55,11 @@ extern "C"
         size_t outOfMemeoryCount;
     } shinyAllocatorDiagnostics;
 
+    /***
+     * @param handle pointer
+     * @return current diagnostics
+     */
+    shinyAllocatorDiagnostics shinyGetDiagnostics(shinyAllocatorInstance *handle);
     /**
      * @brief Initializes the shinyAllocator for the given base pointer and size.
      * @param base base pointer for the pool, it should be aligned to SHINYALLOCATOR_ALIGNMENT

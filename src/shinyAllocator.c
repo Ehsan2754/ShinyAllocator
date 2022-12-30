@@ -66,9 +66,9 @@ SHINYALLOCATOR_PRIVATE uint_fast8_t SHINYALLOCATOR_CLZ(const size_t x)
  *  Encapsulated definitions
  ****************************/
 
-#if !defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L)
-#error "Unsupported language: ISO C99 or a newer version is required."
-#endif // __STDC_VERSION__ || (__STDC_VERSION__ < 199901L)
+// #if !defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L)
+// #error "Unsupported language: ISO C99 or a newer version is required."
+// #endif // __STDC_VERSION__ || (__STDC_VERSION__ < 199901L)
 
 #if __STDC_VERSION__ < 201112L
 #define static_assert(x, ...) typedef char _static_assert_gl(_static_assertion_, __LINE__)[(x) ? 1 : -1]
@@ -271,6 +271,19 @@ SHINYALLOCATOR_PRIVATE void removeFragment(shinyAllocatorInstance *const handle,
  * Public interface implementation
  **********************************/
 
+shinyAllocatorDiagnostics shinyGetDiagnostics(shinyAllocatorInstance *handle)
+{
+    shinyAllocatorDiagnostics diagnostics{
+        .capacity = 0U,
+        .allocated = 0U,
+        .peakAllocated = 0U,
+        .peakRequestSize = 0U,
+        .outOfMemeoryCount = 0U};
+    if (handle)
+        diagnostics = handle->diagnostics;
+    return diagnostics;
+}
+
 shinyAllocatorInstance *shinyInit(void *const base, const size_t size)
 {
     shinyAllocatorInstance *out = NULL;
@@ -306,9 +319,8 @@ shinyAllocatorInstance *shinyInit(void *const base, const size_t size)
         frag->header.used = false;
         frag->nextFree = NULL;
         frag->prevFree = NULL;
-        rebin(out, frag);
+        appendFragment(out, frag);
         SHINYALLOCATOR_ASSERT(out->nonEmptyBinMask != 0U);
-
 
         out->diagnostics.capacity = capacity;
         out->diagnostics.allocated = 0U;

@@ -7,7 +7,13 @@ CFLAGS = -std=c11 -O2 -Wall -Wextra
 # CXX = arm-none-eabi-g++
 CXX = g++
 CXXFLAGS = -std=c++11 -O2 -Wall -Wextra
+LIBSXX= -lgtest -lpthread 
+# GTEST_FILTER="logging*"
 
+
+# GDB
+# GBD = arm-none-eabi-gdb
+GDB = gdb
 # Source and header files
 SOURCES = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
@@ -20,23 +26,52 @@ TEST_OBJECTS = $(TEST_SOURCES:.cc=.o)
 OBJECTS = $(SOURCES:.c=.o)
 
 # Library file
-LIBRARY = libshinyallocator.a
+LIBRARY = libshinyallocator.so
 
 # Default target
-all: test
+all: build test
+
+
+
+# Rule to build the library
+$(LIBRARY): $(OBJECTS)
+	$(AR) rcs $@ $^
+
+
+# Rule to build the object files
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
+
+# Rule to build the object files
+%.o: %.cc $(HEADERS)
+	$(CXX) $(CXXFLAGS) -Iinclude -c $< -o $@
+
+# Build target
+build: $(LIBRARY)
 
 # Test target
 test: $(TEST_OBJECTS)
-	$(CXX) $(CXXFLAGS) $(TEST_OBJECTS) -o test -lgtest -lpthread
-	./test
-	rm -f test
-# Clean target
-clean:
-	rm -rf $(OBJECTS) $(LIBRARY) $(TEST_OBJECTS)
+	$(CXX) $(CXXFLAGS) -Iinclude -o unitTests $(TEST_OBJECTS) $(SOURCES) $(LIBSXX)
+	./unitTests #--gtest_filter=$(GTEST_FILTER)
+	rm -f unitTests
+
+
+
+# Debug target
+debug: CXXFLAGS += -g
+debug: $(TEST_OBJECTS)
+	$(CXX) $(CXXFLAGS) -Iinclude -o unitTests $(TEST_OBJECTS) $(SOURCES) $(LIBSXX)
+	$(GDB) ./unitTests
+	rm -f unitTests
+
 
 # Release target
 release: CFLAGS += -O3
-release: $(LIBRARY)
+release: build
+
+# Clean target
+clean:
+	rm -rf $(OBJECTS) $(LIBRARY) $(TEST_OBJECTS)
 
 # Documentation target
 docs: FORCE

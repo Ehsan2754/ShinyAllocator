@@ -1,33 +1,39 @@
-
-
 #include <gtest/gtest.h>
-
- uint_fast8_t SHINYALLOCATOR_CLZ(const size_t x)
-{
-
-    size_t t = ((size_t)1U) << ((sizeof(size_t) * 8) - 1U);
-    uint_fast8_t r = 0;
-    while ((x & t) == 0)
-    {
-        t >>= 1U;
-        r++;
-    }
-    return r;
-}
-uint_fast8_t log2Floor(const size_t x)
-{
-    return (uint_fast8_t)(((sizeof(x) * 8) - 1U) - ((uint_fast8_t)SHINYALLOCATOR_CLZ(x)));
-}
+#include "shinyAllocator.h"
+// using namespace std;
 namespace
 {
-    TEST(log2FloorTEST, HARDCODE)
+
+    size_t KiB = 1024U;
+    size_t MiB = KiB * KiB;
+
+    char arena[10000] __attribute__((aligned(128)));
+
+    TEST(shinyInitTest, emptyPool)
     {
-        EXPECT_EQ(log2Floor(1), 0);
-        EXPECT_EQ(log2Floor(2), 1);
-        EXPECT_EQ(log2Floor(3), 1);
-        EXPECT_EQ(log2Floor(4), 2);
-        EXPECT_EQ(log2Floor(30), 4);
-        EXPECT_EQ(log2Floor(60), 5);
-        EXPECT_EQ(log2Floor(64), 6);
+        // alignas(128) std::array<std::byte, 10'000U> arena{};
+        auto pool = shinyInit(NULL, 0U);
+        EXPECT_EQ(pool, (shinyAllocatorInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnostics(pool).capacity, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
+        pool = shinyInit(arena, 0U);
+        EXPECT_EQ(pool, (shinyAllocatorInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnostics(pool).capacity, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
+        pool = shinyInit(arena, 99U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).capacity, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
+        // pool = shinyInit(arena, 1000U);
+        // cout << endl << shinyGetDiagnostics(pool).capacity << endl;
     }
+
 }
