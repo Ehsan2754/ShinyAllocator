@@ -49,6 +49,11 @@ $(LIBRARY): $(OBJECTS)
 # Build target
 build: $(LIBRARY)
 
+#Build the Qemu kernel
+cortexm0:
+	cd ./CortexM0 && make clean && make && mv ./build/CortexM0.elf ../kernel.elf
+	./scripts/memAnalyse.sh kernel.elf > release_note.md
+
 # Test target
 test: $(TEST_OBJECTS)
 	$(CXX) $(CXXFLAGS) -Iinclude -o unitTests $(TEST_OBJECTS) $(SOURCES) $(LIBSXX)
@@ -78,7 +83,7 @@ release: build
 
 # Clean target
 clean:
-	rm -rf $(OBJECTS) $(LIBRARY) $(TEST_OBJECTS) unitTests shinyProfile.valgrind
+	rm -rf $(OBJECTS) $(LIBRARY) $(TEST_OBJECTS) unitTests shinyProfile.valgrind *.elf
 
 # Documentation target
 docs: FORCE

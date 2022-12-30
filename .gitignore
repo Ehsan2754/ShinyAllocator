@@ -47,9 +47,13 @@
 *.mod*
 *.cmd
 .tmp_versions/
+
+*.lst
 modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
 .valgrind
 .vscode
+build/
+release*

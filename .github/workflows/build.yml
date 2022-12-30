@@ -18,7 +18,7 @@ jobs:
         sudo apt-get update 
         sudo apt-get install make gcc-arm-none-eabi
     - name: build
-      run: make build
+      run: make build && make cortexm0
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.1
@@ -36,8 +36,20 @@ jobs:
         release_name: libshinyallocatorV1.0-${{ github.run_number }}
         draft: false
         prerelease: false
+        body_path : release_note.md
 
-    - name: Upload Release Asset
+    - name: Upload .so module
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ./libshinyallocator.so
+        asset_name: libshinyallocator.so
+        asset_content_type: binary/so
+
+    - name: Upload .elf Kernel for STM32 Cortex-M0
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:

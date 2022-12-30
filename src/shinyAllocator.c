@@ -62,6 +62,51 @@ SHINYALLOCATOR_PRIVATE uint_fast8_t SHINYALLOCATOR_CLZ(const size_t x)
 }
 #endif // SHINYALLOCATOR_CLZ
 
+/**
+ * @brief FreeRTOS wrapper.
+ * @note This Wrapper is ignored when the FreeRTOS, semphr and task is included prior to inclusion of the library.
+ */
+
+// #if (!defined(INC_FREERTOS_H)) || (!defined(SEMAPHORE_H)) || (!defined(INC_TASK_H))
+
+// #include "FreeRTOS/FreeRTOS.h"
+// #include "FreeRTOS/semphr.h"
+// #include "FreeRTOS/task.h"
+// #include <pthread.h>
+
+// // @brief function for xSemaphoreCreateMutex
+// SemaphoreHandle_t xSemaphoreCreateMutex(void)
+// {
+//     pthread_mutex_t mutex;
+//     pthread_mutex_init(&mutex, NULL);
+//     return (SemaphoreHandle_t)&mutex;
+// }
+
+// // @brief Wrapper function for vSemaphoreDelete
+// void vSemaphoreDelete(SemaphoreHandle_t xSemaphore)
+// {
+//     pthread_mutex_t *mutex = (pthread_mutex_t *)xSemaphore;
+//     pthread_mutex_destroy(mutex);
+// }
+
+// // @brief function for xSemaphoreTake
+// BaseType_t xSemaphoreTake(SemaphoreHandle_t xSemaphore, TickType_t xTicksToWait)
+// {
+//     pthread_mutex_t *mutex = (pthread_mutex_t *)xSemaphore;
+//     int result = pthread_mutex_lock(mutex);
+//     return (result == 0) ? pdTRUE : pdFALSE;
+// }
+
+// // @brief function for xSemaphoreGive
+// BaseType_t xSemaphoreGive(SemaphoreHandle_t xSemaphore)
+// {
+//     pthread_mutex_t *mutex = (pthread_mutex_t *)xSemaphore;
+//     int result = pthread_mutex_unlock(mutex);
+//     return (result == 0) ? pdTRUE : pdFALSE;
+// }
+
+// #endif // (!defined(INC_FREERTOS_H)) || (!defined(SEMAPHORE_H)) || (!defined(INC_TASK_H))
+
 /****************************
  *  Encapsulated definitions
  ****************************/
