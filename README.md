@@ -1,26 +1,20 @@
 # ShinyAllocator 
 ![build](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/build.yml/badge.svg)  ![unittest](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/unittest.yml/badge.svg) [![docs](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/docs.yml/badge.svg)](https://ehsan2754.github.io/ShinyAllocator/)
 
-ShinyAllocator is  a library of a block memory allocator for real-time high-integrity embedded systems. 
+**ShinyAllocator is  a library of a block memory allocator for real-time high-integrity embedded systems.** 
 
-# [Documentation](https://ehsan2754.github.io/ShinyAllocator/)
+### [Documentation](https://ehsan2754.github.io/ShinyAllocator/)  Static Dependency UML Diagram
 
-## Static Dependency UML Diagram
+| Source and Header Dependencies |  Allocator Instance |
+|-|-|
+|![shinyAllocator_8c__incl](https://user-images.githubusercontent.com/53513242/210043414-0d941499-2be5-4dd8-81a0-7960a076f36e.png)|![structshinyAllocatorInstance__coll__graph](https://user-images.githubusercontent.com/53513242/210043502-7475e3ad-b502-4e98-96b4-1fa5888abeb4.png)
 
-### Source and Header Dependencies
-![shinyAllocator_8c__incl](https://user-images.githubusercontent.com/53513242/210043414-0d941499-2be5-4dd8-81a0-7960a076f36e.png)
-
-### Allocator Instance
-![structshinyAllocatorInstance__coll__graph](https://user-images.githubusercontent.com/53513242/210043502-7475e3ad-b502-4e98-96b4-1fa5888abeb4.png)
-
-### Fragment/FragmentHeader  Struct
-![structFragment__coll__graph](https://user-images.githubusercontent.com/53513242/210043323-946f4b6e-1e16-4744-a124-082f9cb190d0.png)
-
-### UnitTest
-![unitTests_8cc__incl](https://user-images.githubusercontent.com/53513242/210043192-32153b5f-0f06-44b3-8cfc-1530975b19cd.png)
+| Fragment/FragmentHeader  Struct| UnitTest |
+|-|-|
+|![structFragment__coll__graph](https://user-images.githubusercontent.com/53513242/210043323-946f4b6e-1e16-4744-a124-082f9cb190d0.png)|![unitTests_8cc__incl](https://user-images.githubusercontent.com/53513242/210043192-32153b5f-0f06-44b3-8cfc-1530975b19cd.png)|
 
 
-# Installation [Development]
+### Installation [Dev Environment]
  0. Choose your Installation path and version of your toolchain in installation [script](./scripts/install_toolchain.sh).
  1. Install GNU Arm Embedded Toolchain
        ```
