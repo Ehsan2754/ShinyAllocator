@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "shinyAllocator.h"
+
 #include <stdlib.h>
 #include <stdalign.h>
 #include <stddef.h>
@@ -65,30 +66,46 @@ namespace
         EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0);
 
         EXPECT_EQ(shinyAllocate(pool, arenaSize), (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 1);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 1U);
 
         EXPECT_EQ(shinyAllocate(pool, arenaSize - SHINYALLOCATOR_ALIGNMENT), (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 2);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 2U);
 
         EXPECT_EQ(shinyAllocate(pool, shinyGetDiagnostics(pool).capacity - SHINYALLOCATOR_ALIGNMENT + 1U), (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 3);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 3U);
 
         EXPECT_EQ(shinyAllocate(pool, arenaSize * 1e4), (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 4);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 4U);
 
         EXPECT_EQ(shinyAllocate(pool, 0U), (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 4);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 4U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
-        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, arenaSize * 1e4);
 
         EXPECT_NE(shinyAllocate(pool, MiB256 - SHINYALLOCATOR_ALIGNMENT), (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 4);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 4U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, MiB256);
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated, MiB256);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, arenaSize * 1e4);
 
         free(arena);
     }
+    /**
+     * @brief shinyFree() API test
+     */
+    TEST(shinyFreeTest, deAllocationLeftRightVerification)
+    {
+        const size_t KiB4 = KiB * 4;
+        const size_t arenaSize = KiB4 + sizeof_shinyAllocatorInstance() + SHINYALLOCATOR_ALIGNMENT + 1U;
+        void *arena = (char *)aligned_alloc(128, arenaSize);
 
+        auto pool = shinyInit(arena, arenaSize);
+        EXPECT_NE(pool, (shinyAllocatorInstance *)NULL);
+        EXPECT_EQ(shinyAllocate(pool, 0U), (shinyAllocatorInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
+    }
 }

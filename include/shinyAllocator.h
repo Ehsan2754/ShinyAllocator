@@ -55,6 +55,10 @@ extern "C"
         size_t outOfMemeoryCount;
     } shinyAllocatorDiagnostics;
 
+    /**
+     * @return size of the shinyAllocatorInstance
+     */
+    size_t sizeof_shinyAllocatorInstance(void);
     /***
      * @param handle pointer
      * @return current diagnostics
@@ -76,8 +80,14 @@ extern "C"
      * @param size the requested allocation size.
      * @note may cause integer-overflow for bigger sizes. It's recommended keep overall allocated bytes less than SIZE_MAX/2-1.
      */
-    void* shinyAllocate(shinyAllocatorInstance* const handle, const size_t amount);
+    void *shinyAllocate(shinyAllocatorInstance *const handle, const size_t amount);
 
+    /**
+     * @brief Frees the memory allocated to the given the pool handle.
+     * @param handle allocator handle to the pool.
+     * @param pointer pointer to the allocated memory.
+     */
+    void shinyFree(shinyAllocatorInstance *const handle, void *const pointer);
 
 #ifdef __cplusplus
 }

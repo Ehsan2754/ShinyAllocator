@@ -42,7 +42,7 @@ $(LIBRARY): $(OBJECTS)
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
 
-# Rule to build the object files
+# Rule to build the test object files
 %.o: %.cc $(HEADERS)
 	$(CXX) $(CXXFLAGS) -Iinclude -c $< -o $@
 

@@ -271,9 +271,14 @@ SHINYALLOCATOR_PRIVATE void removeFragment(shinyAllocatorInstance *const handle,
  * Public interface implementation
  **********************************/
 
+size_t sizeof_shinyAllocatorInstance(void)
+{
+    return sizeof(shinyAllocatorInstance);
+};
+
 shinyAllocatorDiagnostics shinyGetDiagnostics(shinyAllocatorInstance *handle)
 {
-    shinyAllocatorDiagnostics diagnostics={
+    shinyAllocatorDiagnostics diagnostics = {
         .capacity = 0U,
         .allocated = 0U,
         .peakAllocated = 0U,
@@ -407,4 +412,70 @@ void *shinyAllocate(shinyAllocatorInstance *const handle, const size_t amount)
     }
 
     return out;
+}
+
+void shinyFree(shinyAllocatorInstance *const handle, void *const pointer)
+{
+
+    SHINYALLOCATOR_ASSERT(handle != NULL);
+    SHINYALLOCATOR_ASSERT(handle->diagnostics.capacity <= FRAGMENT_SIZE_MAX);
+    if (SHINYALLOCATOR_LIKELY(pointer != NULL))
+    {
+        Fragment *const frag = (Fragment *)(void *)(((char *)pointer) - SHINYALLOCATOR_ALIGNMENT);
+
+        SHINYALLOCATOR_ASSERT(((size_t)frag) % sizeof(Fragment *) == 0U);
+        SHINYALLOCATOR_ASSERT(((size_t)frag) >= (((size_t)handle) + INSTANCE_SIZE_PADDED));
+        SHINYALLOCATOR_ASSERT(((size_t)frag) <=
+                              (((size_t)handle) + INSTANCE_SIZE_PADDED + handle->diagnostics.capacity - FRAGMENT_SIZE_MIN));
+        SHINYALLOCATOR_ASSERT(frag->header.used);
+        SHINYALLOCATOR_ASSERT(((size_t)frag->header.next) % sizeof(Fragment *) == 0U);
+        SHINYALLOCATOR_ASSERT(((size_t)frag->header.prev) % sizeof(Fragment *) == 0U);
+        SHINYALLOCATOR_ASSERT(frag->header.size >= FRAGMENT_SIZE_MIN);
+        SHINYALLOCATOR_ASSERT(frag->header.size <= handle->diagnostics.capacity);
+        SHINYALLOCATOR_ASSERT((frag->header.size % FRAGMENT_SIZE_MIN) == 0U);
+
+        frag->header.used = false;
+
+        SHINYALLOCATOR_ASSERT(handle->diagnostics.allocated >= frag->header.size);
+        handle->diagnostics.allocated -= frag->header.size;
+
+        Fragment *const prev = frag->header.prev;
+        Fragment *const next = frag->header.next;
+        const bool join_left = (prev != NULL) && (!prev->header.used);
+        const bool join_right = (next != NULL) && (!next->header.used);
+
+        if (join_left && join_right)
+        {
+            removeFragment(handle, prev);
+            removeFragment(handle, next);
+            prev->header.size += frag->header.size + next->header.size;
+            frag->header.size = 0;
+            next->header.size = 0;
+            SHINYALLOCATOR_ASSERT((prev->header.size % FRAGMENT_SIZE_MIN) == 0U);
+            fragmentLink(prev, next->header.next);
+            removeFragment(handle, prev);
+        }
+        else if (join_left)
+        {
+            removeFragment(handle, prev);
+            prev->header.size += frag->header.size;
+            frag->header.size = 0;
+            SHINYALLOCATOR_ASSERT((prev->header.size % FRAGMENT_SIZE_MIN) == 0U);
+            fragmentLink(prev, next);
+            removeFragment(handle, prev);
+        }
+        else if (join_right)
+        {
+            removeFragment(handle, next);
+            frag->header.size += next->header.size;
+            next->header.size = 0;
+            SHINYALLOCATOR_ASSERT((frag->header.size % FRAGMENT_SIZE_MIN) == 0U);
+            fragmentLink(frag, next->header.next);
+            removeFragment(handle, frag);
+        }
+        else
+        {
+            removeFragment(handle, frag);
+        }
+    }
 }
