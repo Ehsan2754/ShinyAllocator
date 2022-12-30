@@ -39,7 +39,7 @@ jobs:
         body_path : release_note.md
 
     - name: Upload .so module
-      id: upload-release-asset 
+      id: upload-so-module 
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,13 +49,13 @@ jobs:
         asset_name: libshinyallocator.so
         asset_content_type: binary/so
 
-    - name: Upload .elf Kernel for STM32 Cortex-M0
-      id: upload-release-asset 
+    - name: Upload .elf Cortex-M0 Kernel 
+      id: upload-elf-kernel 
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: ./libshinyallocator.so
-        asset_name: libshinyallocator.so
-        asset_content_type: binary/so
+        asset_path: ./kernel.elf
+        asset_name: kernel.elf
+        asset_content_type: binary/elf
