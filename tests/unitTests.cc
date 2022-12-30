@@ -4,14 +4,16 @@ using namespace std;
 namespace
 {
 
-    size_t KiB = 1024U;
-    size_t MiB = KiB * KiB;
+    const size_t KiB = 1024U;
+    const size_t MiB = KiB * KiB;
 
-    char arena[10000] __attribute__((aligned(128)));
-
-    TEST(shinyInitTest, emptyPool)
+    /**
+    * @brief shinyInit() API test
+    */
+    TEST(shinyInitTest, emptyPoolCapacityTest)
     {
-        // alignas(128) std::array<std::byte, 10'000U> arena{};
+        const size_t arenaSize = 1E4;
+        char arena[arenaSize] __attribute__((aligned(64)));
         auto pool = shinyInit(NULL, 0U);
         EXPECT_EQ(pool, (shinyAllocatorInstance *)NULL);
         EXPECT_EQ(shinyGetDiagnostics(pool).capacity, 0U);
@@ -40,6 +42,19 @@ namespace
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
  
+    }
+
+    /**
+    * @brief shinyAllocate() API test
+    */
+    TEST(shinyAllocateTest, emptyPoolCapacityTest)
+    {
+        const size_t MiB256 = MiB * 256;
+        const size_t arenaSize = MiB + MiB256;
+        char arena[arenaSize] __attribute__((aligned(64U)));
+        // auto pool = shinyInit(arena, arenaSize);
+        // EXPECT_NE(pool,(shinyAllocatorInstance*)NULL);
+
     }
 
 }

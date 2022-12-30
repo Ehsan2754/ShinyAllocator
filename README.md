@@ -13,8 +13,29 @@ https://ehsan2754.github.io/ShinyAllocator/
 
        ```
     > script will print two lines to add toolchain directory to your PATH
- 2. Install building tools *make,doxygen,graphviz*
+ 2. Install build, documentation, debug and profiling tools *make,doxygen,graphviz,valgrind,kcachegrind*
        ```
        sudo apt-get update && sudo apt-get upgrade
-       sudo apt-get install make cmake doxygen graphviz
+       sudo apt-get install make cmake doxygen graphviz valgrind kcachegrind
        ```
+3. Installing test framework[gtest](https://github.com/google/googletest.git)
+   * On Ubuntu/RPI:
+      ```
+      sudo apt-get install libgtest-dev
+      cd /usr/src/gtest
+      sudo cmake CMakeLists.txt
+      sudo make
+      sudo cp *.a /usr/lib
+      sudo ldconfig
+      ```
+   * Build from source for your targer platform (arm):
+      ```
+      sudo apt-get install cmake
+      git clone https://github.com/google/googletest.git
+      cd googletest
+      mkdir build
+      cd build
+      cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchains/arm-none-eabi.cmake ..
+      make
+      sudo make install
+      ```

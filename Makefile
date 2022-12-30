@@ -55,6 +55,12 @@ test: $(TEST_OBJECTS)
 	./unitTests #--gtest_filter=$(GTEST_FILTER)
 	rm -f unitTests
 
+# Leak check with Valgrind
+valgrind: $(TEST_OBJECTS)
+	$(CXX) $(CXXFLAGS) -Iinclude -o unitTests $(TEST_OBJECTS) $(SOURCES) $(LIBSXX)
+	valgrind --tool=callgrind --callgrind-out-file=shinyProfile.valgrind ./unitTests #--gtest_filter=$(GTEST_FILTER)
+	kcachegrind shinyProfile.valgrind
+	rm -f unitTests shinyProfile.valgrind
 
 
 # Debug target
@@ -71,7 +77,7 @@ release: build
 
 # Clean target
 clean:
-	rm -rf $(OBJECTS) $(LIBRARY) $(TEST_OBJECTS)
+	rm -rf $(OBJECTS) $(LIBRARY) $(TEST_OBJECTS) unitTests shinyProfile.valgrind
 
 # Documentation target
 docs: FORCE
