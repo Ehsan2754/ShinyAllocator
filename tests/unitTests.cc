@@ -1,11 +1,7 @@
 #include <gtest/gtest.h>
 #include "shinyAllocator.h"
 
-#include <stdlib.h>
-#include <stdalign.h>
-#include <stddef.h>
 
-using namespace std;
 namespace
 {
 
@@ -112,7 +108,7 @@ namespace
         EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount,0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, KiB4);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, KiB4-SHINYALLOCATOR_ALIGNMENT);
-        
+
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated, KiB4);
         shinyFree(pool, ptr);
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated,0);

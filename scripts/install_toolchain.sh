@@ -20,7 +20,6 @@ INSTALL_DIR=/usr/share/
 sudo apt install libncurses-dev
 sudo ln -sf /usr/lib/x86_64-linux-gnu/libncurses.so.6 /usr/lib/x86_64-linux-gnu/libncurses.so.5
 sudo ln -sf /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
-sudo cp ${INSTALL_DIR}/gcc-arm-none-eabi-${TOOLCHAIN_VERSION}/bin/* /usr/bin/
 export PATH=$PATH:${INSTALL_DIR}/gcc-arm-none-eabi-${TOOLCHAIN_VERSION}/bin
 
 # Reload the environment variables

@@ -1,11 +1,11 @@
 # Compiler and flags
-# CC = arm-none-eabi-gcc
-CC = gcc
+CC = arm-none-eabi-gcc
+# CC = gcc
 CFLAGS = -std=c11 -O2 -Wall -Wextra
 
 # Test compiler and flags
-# CXX = arm-none-eabi-g++
-CXX = g++
+CXX = arm-none-eabi-g++
+# CXX = g++
 CXXFLAGS = -std=c++11 -O2 -Wall -Wextra
 LIBSXX= -lgtest -lpthread 
 # GTEST_FILTER="logging*"
@@ -20,7 +20,7 @@ HEADERS = $(wildcard include/*.h)
 
 # Test source and object files
 TEST_SOURCES = $(wildcard tests/*.cc)
-TEST_OBJECTS = $(TEST_SOURCES:.cc=.o)
+TEST_OBJECTS = $(TEST_SOURCES:.cc=.oo)
 
 # Object files
 OBJECTS = $(SOURCES:.c=.o)
@@ -43,7 +43,7 @@ $(LIBRARY): $(OBJECTS)
 	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
 
 # Rule to build the test object files
-%.o: %.cc $(HEADERS)
+%.oo: %.cc $(HEADERS)
 	$(CXX) $(CXXFLAGS) -Iinclude -c $< -o $@
 
 # Build target
