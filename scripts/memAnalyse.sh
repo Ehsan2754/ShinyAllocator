@@ -2,7 +2,7 @@
 print_help () {
   echo "Usage: memory_analyse.sh <target>"
   echo "Single target example: memory_analyse.sh <target>"
-  echo "Multiple targets example: memory_analyse.sh <target1> target2"
+  echo "Multiple targets example: memory_analyse.sh <target1>,<target2>"
   exit -1
 }
 

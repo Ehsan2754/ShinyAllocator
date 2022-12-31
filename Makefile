@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = arm-none-eabi-gcc
 CC = gcc
-CFLAGS = -std=c11 -O2 -Wall -Wextra
+CFLAGS = -std=c11 -O2 -Wall -Wextra 
 
 # Test compiler and flags
 CXX = arm-none-eabi-g++
@@ -29,7 +29,11 @@ OBJECTS = $(SOURCES:.c=.o)
 LIBRARY = libshinyallocator.so
 
 # Default target
-all: build test
+all: clean build cortexm0 test 
+all: 
+	@./scripts/memAnalyse.sh kernel.elf,libshinyallocator.so
+	
+
 
 
 
@@ -51,14 +55,13 @@ build: $(LIBRARY)
 
 #Build the Qemu kernel
 cortexm0:
-	cd ./CortexM0 && make clean && make && mv ./build/CortexM0.elf ../kernel.elf
-	./scripts/memAnalyse.sh kernel.elf > release_note.md
-
+	cd ./CortexM0 && make clean && make && mv -f ./build/CortexM0.elf ../kernel.elf && mv -f ./build/shinyAllocator.o ../libshinyallocator.so
+	./scripts/memAnalyse.sh kernel.elf,libshinyallocator.so > release_note.md
 # Test target
 test: $(TEST_OBJECTS)
 	$(CXX) $(CXXFLAGS) -Iinclude -o unitTests $(TEST_OBJECTS) $(SOURCES) $(LIBSXX)
 	./unitTests #--gtest_filter=$(GTEST_FILTER)
-	rm -f unitTests
+	@rm -f unitTests
 
 # Leak check with Valgrind
 valgrind: $(TEST_OBJECTS)
@@ -66,7 +69,7 @@ valgrind: $(TEST_OBJECTS)
 	@valgrind --tool=callgrind --callgrind-out-file=shinyProfile.valgrind ./unitTests #--gtest_filter=$(GTEST_FILTER)
 	valgrind --leak-check=full ./unitTests #--gtest_filter=$(GTEST_FILTER)
 	kcachegrind shinyProfile.valgrind&
-	rm -f unitTests 
+	@rm -f unitTests 
 
 
 # Debug target
