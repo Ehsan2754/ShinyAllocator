@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include "shinyAllocator.h"
 
-
 namespace
 {
 
@@ -103,15 +102,27 @@ namespace
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, 0U);
-        auto ptr = shinyAllocate(pool, KiB4-SHINYALLOCATOR_ALIGNMENT);
+        auto ptr = shinyAllocate(pool, KiB4 - SHINYALLOCATOR_ALIGNMENT);
         EXPECT_NE(ptr, (shinyAllocatorInstance *)NULL);
-        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount,0U);
+        EXPECT_EQ(shinyGetDiagnostics(pool).outOfMemeoryCount, 0U);
         EXPECT_EQ(shinyGetDiagnostics(pool).peakAllocated, KiB4);
-        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, KiB4-SHINYALLOCATOR_ALIGNMENT);
+        EXPECT_EQ(shinyGetDiagnostics(pool).peakRequestSize, KiB4 - SHINYALLOCATOR_ALIGNMENT);
 
         EXPECT_EQ(shinyGetDiagnostics(pool).allocated, KiB4);
         shinyFree(pool, ptr);
-        EXPECT_EQ(shinyGetDiagnostics(pool).allocated,0);
+        EXPECT_EQ(shinyGetDiagnostics(pool).allocated, 0);
+    }
 
+    /**
+     * @brief shinyXSafeThread() API test
+     */
+    TEST(shinyFreeThreadSafeTest, deAllocationLeftRightVerification)
+    {
+        const size_t KiB4 = KiB * 4;
+        const size_t arenaSize = KiB4 + sizeof_shinyAllocatorThreadSafeInstance() + sizeof_shinyAllocatorInstance() + SHINYALLOCATOR_ALIGNMENT + 1U;
+        void *arena = (char *)aligned_alloc(128, arenaSize);
+
+        auto pool = shinyInitThreadSafe(arena, arenaSize);
+        EXPECT_EQ(pool, (shinyAllocatorThreadSafeInstance *)NULL);
     }
 }

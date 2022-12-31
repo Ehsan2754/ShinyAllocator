@@ -22,7 +22,6 @@ uint_fast8_t case1()
     const size_t KiB4 = KiB * 4;
     const size_t arenaSize = KiB4 + sizeof_shinyAllocatorInstance() + SHINYALLOCATOR_ALIGNMENT + 1U;
 
-
     __attribute__((aligned(128))) uint_fast8_t arena[arenaSize];
     shinyAllocatorInstance *pool = shinyInit(arena, arenaSize);
     result = (pool != (shinyAllocatorInstance *)NULL) ? SUCESS : ERROR;
@@ -42,6 +41,16 @@ uint_fast8_t case1()
     return result;
 }
 
+void case2()
+{
+    uint_fast8_t result = SUCESS;
+    const size_t KiB4 = KiB * 4;
+    const size_t arenaSize = KiB4 + sizeof_shinyAllocatorThreadSafeInstance() + sizeof_shinyAllocatorInstance() + SHINYALLOCATOR_ALIGNMENT + 1U;
+    void *arena = (char *)aligned_alloc(128, arenaSize);
+
+    auto pool = shinyInitThreadSafe(arena, arenaSize);
+    result = (pool== (shinyAllocatorThreadSafeInstance *)NULL)? SUCESS:ERROR;
+}
 void test()
 {
     printf("==================================\n");

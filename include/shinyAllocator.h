@@ -36,7 +36,7 @@ extern "C"
      * @brief encapsulation of the structure instance
      */
     typedef struct shinyAllocatorInstance shinyAllocatorInstance;
-    typedef struct shinyAllocatorThreadSafe shinyAllocatorThreadSafe;
+    typedef struct shinyAllocatorThreadSafeInstance shinyAllocatorThreadSafeInstance;
 
     /**
      * @brief struct for performing runtime diagnostic tests
@@ -60,11 +60,18 @@ extern "C"
      * @return size of the shinyAllocatorInstance
      */
     size_t sizeof_shinyAllocatorInstance(void);
-    /***
+
+    /**
+     * @return size of the shinyAllocatorThreadSafeInstance
+     */
+    size_t sizeof_shinyAllocatorThreadSafeInstance(void);
+
+    /**
      * @param handle pointer
      * @return current diagnostics
      */
     shinyAllocatorDiagnostics shinyGetDiagnostics(shinyAllocatorInstance *handle);
+
     /**
      * @brief Initializes the shinyAllocator for the given base pointer and size.
      * @param base base pointer for the pool, it should be aligned to SHINYALLOCATOR_ALIGNMENT.
@@ -95,7 +102,7 @@ extern "C"
      * @param threadSafeHandle Thread-safe shinyAllocator instance.
      * @return Diagnostics for the shinyAllocator instance.
      */
-    shinyAllocatorDiagnostics shinyGetDiagnosticsThreadSafe(shinyAllocatorThreadSafe *const threadSafeHandle);
+    shinyAllocatorDiagnostics shinyGetDiagnosticsThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle);
 
     /**
      * @brief Initializes a thread-safe shinyAllocator instance.
@@ -103,7 +110,7 @@ extern "C"
      * @param size Size of the shinyAllocator instance.
      * @return Thread-safe shinyAllocator instance.
      */
-    shinyAllocatorThreadSafe *shinyInitThreadSafe(void *const base, const size_t size);
+    shinyAllocatorThreadSafeInstance *shinyInitThreadSafe(void *const base, const size_t size);
 
     /**
      * @brief Allocates memory from a thread-safe shinyAllocator instance.
@@ -111,14 +118,14 @@ extern "C"
      * @param amount Amount of memory to allocate.
      * @return Pointer to the allocated memory.
      */
-    void *shinyAllocateThreadSafe(shinyAllocatorThreadSafe *const threadSafeHandle, const size_t amount);
+    void *shinyAllocateThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle, const size_t amount);
 
     /**
      * @brief Frees memory allocated by a thread-safe shinyAllocator instance.
      * @param threadSafeHandle Thread-safe shinyAllocator instance.
      * @param pointer Pointer to the memory to be freed.
      */
-    void shinyFreeThreadSafe(shinyAllocatorThreadSafe *const threadSafeHandle, void *const pointer);
+    void shinyFreeThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle, void *const pointer);
 #ifdef __cplusplus
 }
 #endif
