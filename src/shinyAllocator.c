@@ -12,6 +12,8 @@
 #include "shinyAllocator.h"
 #include <assert.h>
 #include <limits.h>
+#include <stdint.h>
+#include <stddef.h>
 
 /***********************
  * Build configurations
@@ -62,50 +64,81 @@ SHINYALLOCATOR_PRIVATE uint_fast8_t SHINYALLOCATOR_CLZ(const size_t x)
 }
 #endif // SHINYALLOCATOR_CLZ
 
-/**
- * @brief FreeRTOS wrapper.
- * @note This Wrapper is ignored when the FreeRTOS, semphr and task is included prior to inclusion of the library.
+/***
+ * @brief Mutex wrapper around FreeRTOS and Standard mutex interface
  */
+#ifdef SHINYALLOCATOR_FREERTOS
+#include <FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
 
-// #if (!defined(INC_FREERTOS_H)) || (!defined(SEMAPHORE_H)) || (!defined(INC_TASK_H))
+// Standard mutex type
+typedef struct
+{
+    SemaphoreHandle_t handle;
+} mutex_t;
 
-// #include "FreeRTOS/FreeRTOS.h"
-// #include "FreeRTOS/semphr.h"
-// #include "FreeRTOS/task.h"
-// #include <pthread.h>
+// Initialize a mutex
+SHINYALLOCATOR_PRIVATE int8_t mutex_init(mutex_t *mutex)
+{
+    mutex->handle = xSemaphoreCreateMutex();
+    return (mutex->handle != NULL) ? 0 : -1;
+}
 
-// // @brief function for xSemaphoreCreateMutex
-// SemaphoreHandle_t xSemaphoreCreateMutex(void)
-// {
-//     pthread_mutex_t mutex;
-//     pthread_mutex_init(&mutex, NULL);
-//     return (SemaphoreHandle_t)&mutex;
-// }
+// Destroy a mutex
+SHINYALLOCATOR_PRIVATE int8_t mutex_destroy(mutex_t *mutex)
+{
+    vSemaphoreDelete(mutex->handle);
+    return 0;
+}
 
-// // @brief Wrapper function for vSemaphoreDelete
-// void vSemaphoreDelete(SemaphoreHandle_t xSemaphore)
-// {
-//     pthread_mutex_t *mutex = (pthread_mutex_t *)xSemaphore;
-//     pthread_mutex_destroy(mutex);
-// }
+// Lock a mutex
+SHINYALLOCATOR_PRIVATE int8_t mutex_lock(mutex_t *mutex)
+{
+    return xSemaphoreTake(mutex->handle, portMAX_DELAY) == pdTRUE ? 0 : -1;
+}
 
-// // @brief function for xSemaphoreTake
-// BaseType_t xSemaphoreTake(SemaphoreHandle_t xSemaphore, TickType_t xTicksToWait)
-// {
-//     pthread_mutex_t *mutex = (pthread_mutex_t *)xSemaphore;
-//     int result = pthread_mutex_lock(mutex);
-//     return (result == 0) ? pdTRUE : pdFALSE;
-// }
+// Try to lock a mutex
+SHINYALLOCATOR_PRIVATE int8_t mutex_trylock(mutex_t *mutex)
+{
+    return xSemaphoreTake(mutex->handle, 0) == pdTRUE ? 0 : -1;
+}
+// Unlock a mutex
+SHINYALLOCATOR_PRIVATE int8_t mutex_unlock(mutex_t *mutex)
+{
+    return xSemaphoreGive(mutex->handle) == pdTRUE ? 0 : -1;
+}
+#else
+#include <pthread.h>
 
-// // @brief function for xSemaphoreGive
-// BaseType_t xSemaphoreGive(SemaphoreHandle_t xSemaphore)
-// {
-//     pthread_mutex_t *mutex = (pthread_mutex_t *)xSemaphore;
-//     int result = pthread_mutex_unlock(mutex);
-//     return (result == 0) ? pdTRUE : pdFALSE;
-// }
+typedef pthread_mutex_t mutex_t;
 
-// #endif // (!defined(INC_FREERTOS_H)) || (!defined(SEMAPHORE_H)) || (!defined(INC_TASK_H))
+SHINYALLOCATOR_PRIVATE int8_t mutex_init(mutex_t *mutex)
+{
+    return pthread_mutex_init(mutex, NULL);
+}
+
+SHINYALLOCATOR_PRIVATE int8_t mutex_destroy(mutex_t *mutex)
+{
+    return pthread_mutex_destroy(mutex);
+}
+
+SHINYALLOCATOR_PRIVATE int8_t mutex_lock(mutex_t *mutex)
+{
+    return pthread_mutex_lock(mutex);
+}
+
+SHINYALLOCATOR_PRIVATE int8_t mutex_trylock(mutex_t *mutex)
+{
+    return pthread_mutex_trylock(mutex);
+}
+
+SHINYALLOCATOR_PRIVATE int8_t mutex_unlock(mutex_t *mutex)
+{
+    return pthread_mutex_unlock(mutex);
+}
+
+#endif // SHINYALLOCATOR_FREERTOS
 
 /****************************
  *  Encapsulated definitions
