@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = arm-none-eabi-gcc
-# CC = gcc
+CC = gcc
 CFLAGS = -std=c11 -O2 -Wall -Wextra
 
 # Test compiler and flags
@@ -12,7 +12,7 @@ LIBSXX= -lgtest -lpthread
 
 
 # GDB
-# GBD = arm-none-eabi-gdb
+GBD = arm-none-eabi-gdb
 GDB = gdb
 # Source and header files
 SOURCES = $(wildcard src/*.c)
