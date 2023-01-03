@@ -1,9 +1,9 @@
 # ShinyAllocator 
-![build](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/build.yml/badge.svg)  ![unittest](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/unittest.yml/badge.svg) [![docs](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/docs.yml/badge.svg)](https://ehsan2754.github.io/ShinyAllocator/)
+![build](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/build.yml/badge.svg)  ![unittest](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/unittest.yml/badge.svg) [![docs](https://github.com/Ehsan2754/ShinyAllocator/actions/workflows/docs.yml/badge.svg)](https://ehsan2754.github.io/ShinyAllocator/shinyAllocator_8c.html)
 
 **ShinyAllocator is  a library of a block memory allocator for real-time high-integrity embedded systems.** 
 
-### [Documentation](https://ehsan2754.github.io/ShinyAllocator/)  Static Dependency UML Diagram
+### [Documentation](https://ehsan2754.github.io/ShinyAllocator/shinyAllocator_8c.html)  Static Dependency UML Diagram
 
 | Source and Header Dependencies |  Allocator Instance |
 |-|-|
