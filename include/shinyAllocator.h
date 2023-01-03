@@ -37,7 +37,10 @@ extern "C"
      */
     typedef struct shinyAllocatorInstance shinyAllocatorInstance;
     typedef struct shinyAllocatorThreadSafeInstance shinyAllocatorThreadSafeInstance;
-
+    typedef  int_fast8_t SHINY_STATUS;
+    /**
+     * @brief shinyAllocator instance
+     */
     /**
      * @brief struct for performing runtime diagnostic tests
      *
@@ -125,7 +128,14 @@ extern "C"
      * @param threadSafeHandle Thread-safe shinyAllocator instance.
      * @param pointer Pointer to the memory to be freed.
      */
-    void shinyFreeThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle, void *const pointer);
+    SHINY_STATUS shinyFreeThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle, void *const pointer);
+
+    /**
+     * @brief Deinitializes a thread-safe shinyAllocator instance
+     *
+     * @param threadSafeHandle
+     */
+    SHINY_STATUS shinyDeinitThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle);
 #ifdef __cplusplus
 }
 #endif

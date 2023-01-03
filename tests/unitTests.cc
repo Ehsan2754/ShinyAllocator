@@ -118,11 +118,30 @@ namespace
      */
     TEST(shinyFreeThreadSafeTest, deAllocationLeftRightVerification)
     {
-        const size_t KiB4 = KiB * 4;
-        const size_t arenaSize = KiB4 + sizeof_shinyAllocatorThreadSafeInstance() + sizeof_shinyAllocatorInstance() + SHINYALLOCATOR_ALIGNMENT + 1U;
+        const size_t KiB256 = KiB * 256;
+        const size_t arenaSize = KiB256 + sizeof_shinyAllocatorThreadSafeInstance() + SHINYALLOCATOR_ALIGNMENT + 1U;
         void *arena = (char *)aligned_alloc(128, arenaSize);
 
         auto pool = shinyInitThreadSafe(arena, arenaSize);
-        EXPECT_EQ(pool, (shinyAllocatorThreadSafeInstance *)NULL);
+        EXPECT_NE(pool, (shinyAllocatorThreadSafeInstance *)NULL);
+        EXPECT_EQ(shinyAllocateThreadSafe(pool, 0U), (shinyAllocatorThreadSafeInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).outOfMemeoryCount, 0U);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).peakAllocated, 0U);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).allocated, 0U);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).peakRequestSize, 0U);
+        auto ptr = shinyAllocateThreadSafe(pool, KiB256);
+        EXPECT_EQ(ptr, (shinyAllocatorThreadSafeInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).outOfMemeoryCount, 1U);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).peakAllocated, 0);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).peakRequestSize, KiB256);
+
+        ptr = shinyAllocateThreadSafe(pool, 256);
+        EXPECT_NE(ptr, (shinyAllocatorThreadSafeInstance *)NULL);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).outOfMemeoryCount, 1U);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).peakAllocated, 512);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).peakRequestSize, KiB256);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).allocated, 512);
+        shinyFreeThreadSafe(pool, ptr);
+        EXPECT_EQ(shinyGetDiagnosticsThreadSafe(pool).allocated, 0);
     }
 }

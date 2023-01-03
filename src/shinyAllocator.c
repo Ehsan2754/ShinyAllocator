@@ -17,6 +17,7 @@
 
 #define SHINYALLOCATOR_ERROR -1
 #define SHINYALLOCATOR_OK 0
+
 /***********************
  * Build configurations
  **********************/
@@ -52,7 +53,8 @@
 #endif
 
 #ifndef SHINYALLOCATOR_CLZ
-SHINYALLOCATOR_PRIVATE uint_fast8_t SHINYALLOCATOR_CLZ(const size_t x)
+    SHINYALLOCATOR_PRIVATE uint_fast8_t
+    SHINYALLOCATOR_CLZ(const size_t x)
 {
     SHINYALLOCATOR_ASSERT(x > 0);
     size_t t = ((size_t)1U) << ((sizeof(size_t) * CHAR_BIT) - 1U);
@@ -80,62 +82,62 @@ typedef struct
     SemaphoreHandle_t handle;
 } mutex_t;
 
-// Initialize a mutex
-SHINYALLOCATOR_PRIVATE int8_t mutex_init(mutex_t *mutex)
+// @brief Initialize a mutex
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_init(mutex_t *mutex)
 {
     mutex->handle = xSemaphoreCreateMutex();
     return (mutex->handle != NULL) ? SHINYALLOCATOR_OK : SHINYALLOCATOR_ERROR;
 }
 
-// Destroy a mutex
-SHINYALLOCATOR_PRIVATE int8_t mutex_destroy(mutex_t *mutex)
+// @brief Destroy a mutex
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_destroy(mutex_t *mutex)
 {
     vSemaphoreDelete(mutex->handle);
     return 0;
 }
 
-// Lock a mutex
-SHINYALLOCATOR_PRIVATE int8_t mutex_lock(mutex_t *mutex)
+// @brief Lock a mutex
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_lock(mutex_t *mutex)
 {
     return xSemaphoreTake(mutex->handle, portMAX_DELAY) == pdTRUE ? SHINYALLOCATOR_OK : SHINYALLOCATOR_ERROR;
 }
 
-// Try to lock a mutex
-SHINYALLOCATOR_PRIVATE int8_t mutex_trylock(mutex_t *mutex)
+// @brief Try to lock a mutex
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_trylock(mutex_t *mutex)
 {
     return xSemaphoreTake(mutex->handle, 0) == pdTRUE ? SHINYALLOCATOR_OK : SHINYALLOCATOR_ERROR;
 }
-// Unlock a mutex
-SHINYALLOCATOR_PRIVATE int8_t mutex_unlock(mutex_t *mutex)
+// @brief Unlock a mutex
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_unlock(mutex_t *mutex)
 {
     return xSemaphoreGive(mutex->handle) == pdTRUE ? SHINYALLOCATOR_OK : SHINYALLOCATOR_ERROR;
 }
 #else
 #include <pthread.h>
 
-typedef pthread_mutex_t mutex_t;
+    typedef pthread_mutex_t mutex_t;
 
-SHINYALLOCATOR_PRIVATE int8_t mutex_init(mutex_t *mutex)
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_init(mutex_t *mutex)
 {
     return pthread_mutex_init(mutex, NULL);
 }
 
-SHINYALLOCATOR_PRIVATE int8_t mutex_destroy(mutex_t *mutex)
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_destroy(mutex_t *mutex)
 {
     return pthread_mutex_destroy(mutex);
 }
 
-SHINYALLOCATOR_PRIVATE int8_t mutex_lock(mutex_t *mutex)
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_lock(mutex_t *mutex)
 {
     return pthread_mutex_lock(mutex);
 }
 
-SHINYALLOCATOR_PRIVATE int8_t mutex_trylock(mutex_t *mutex)
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_trylock(mutex_t *mutex)
 {
     return pthread_mutex_trylock(mutex);
 }
 
-SHINYALLOCATOR_PRIVATE int8_t mutex_unlock(mutex_t *mutex)
+SHINYALLOCATOR_PRIVATE SHINY_STATUS mutex_unlock(mutex_t *mutex)
 {
     return pthread_mutex_unlock(mutex);
 }
@@ -590,18 +592,33 @@ shinyAllocatorDiagnostics shinyGetDiagnosticsThreadSafe(shinyAllocatorThreadSafe
 shinyAllocatorThreadSafeInstance *shinyInitThreadSafe(void *const base, const size_t size)
 {
     shinyAllocatorThreadSafeInstance *threadSafeHandle = NULL;
+    SHINY_STATUS status = SHINYALLOCATOR_OK;
     if (base != NULL)
     {
         threadSafeHandle = (shinyAllocatorThreadSafeInstance *)base;
-        mutex_init(&threadSafeHandle->mutex);
-        mutex_lock(&threadSafeHandle->mutex);
-        void *allocatorBase = (uint8_t *)base + sizeof(shinyAllocatorThreadSafeInstance);
-        threadSafeHandle->handle = shinyInit(allocatorBase, size - sizeof(mutex_t));
-        if (threadSafeHandle->handle == NULL)
+        if (status == SHINYALLOCATOR_OK)
         {
-            mutex_unlock(&threadSafeHandle->mutex);
-            mutex_destroy(&threadSafeHandle->mutex);
-            threadSafeHandle = NULL;
+            status = mutex_init(&threadSafeHandle->mutex);
+        };
+        if (status == SHINYALLOCATOR_OK)
+        {
+            status = mutex_lock(&threadSafeHandle->mutex);
+            if (status == SHINYALLOCATOR_ERROR)
+            {
+                mutex_destroy(&threadSafeHandle->mutex);
+                threadSafeHandle = NULL;
+            }
+        }
+        if (status == SHINYALLOCATOR_OK)
+        {
+            void *allocatorBase = (uint_fast8_t *)base + sizeof(shinyAllocatorThreadSafeInstance) + SHINYALLOCATOR_ALIGNMENT - (sizeof(shinyAllocatorThreadSafeInstance) % SHINYALLOCATOR_ALIGNMENT);
+            threadSafeHandle->handle = shinyInit(allocatorBase, size - sizeof(shinyAllocatorThreadSafeInstance));
+            if (threadSafeHandle->handle == NULL)
+            {
+                mutex_unlock(&threadSafeHandle->mutex);
+                mutex_destroy(&threadSafeHandle->mutex);
+                threadSafeHandle = NULL;
+            }
         }
         if (threadSafeHandle != NULL)
         {
@@ -615,19 +632,34 @@ void *shinyAllocateThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafe
     void *pointer = NULL;
     if (threadSafeHandle != NULL)
     {
-        mutex_lock(&threadSafeHandle->mutex);
+        if (mutex_lock(&threadSafeHandle->mutex) == SHINYALLOCATOR_ERROR)
+        {
+            return pointer;
+        };
         pointer = shinyAllocate(threadSafeHandle->handle, amount);
         mutex_unlock(&threadSafeHandle->mutex);
     }
     return pointer;
 }
 
-void shinyFreeThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle, void *const pointer)
+SHINY_STATUS shinyFreeThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle, void *const pointer)
 {
+    SHINY_STATUS status= SHINYALLOCATOR_ERROR;
     if (threadSafeHandle != NULL)
     {
-        mutex_lock(&threadSafeHandle->mutex);
+        status = mutex_lock(&threadSafeHandle->mutex);
         shinyFree(threadSafeHandle->handle, pointer);
         mutex_unlock(&threadSafeHandle->mutex);
     }
+    return status;
+}
+
+SHINY_STATUS shinyDeinitThreadSafe(shinyAllocatorThreadSafeInstance *const threadSafeHandle)
+{
+    SHINY_STATUS status= SHINYALLOCATOR_ERROR;
+    if (threadSafeHandle != NULL)
+    {
+        status = mutex_destroy(&threadSafeHandle->mutex);
+    }
+    return status;
 }
